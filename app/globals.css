@@ -1,0 +1,116 @@
+@import "tailwindcss";
+
+/*
+  Real Live design tokens.
+  Source of truth: design.md (Best AI Tools Directory & Alternatives foundations).
+  Tailwind v4 @theme maps semantic tokens to utilities.
+*/
+@theme {
+  /* font.family.primary = Space Grotesk, full stack from design.md */
+  --font-sans: var(--font-space-grotesk), "Space Grotesk", "Avenir Next",
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC",
+    "Noto Sans SC", ui-sans-serif, sans-serif;
+
+  /* Typography scale (design.md font.size.*) */
+  --text-xs: 10px;
+  --text-xs--line-height: 14px;
+  --text-sm: 12px;
+  --text-sm--line-height: 16px;
+  --text-md: 12.5px;
+  --text-md--line-height: 18px;
+  --text-lg: 13px;
+  --text-lg--line-height: 18px;
+  --text-xl: 13.5px;
+  --text-xl--line-height: 20px;
+  --text-2xl: 14px;
+  --text-2xl--line-height: 20px;
+  --text-3xl: 14.5px;
+  --text-3xl--line-height: 20px;
+  --text-4xl: 15px;
+  --text-4xl--line-height: 22px;
+
+  /* Color palette (design.md color.*)
+     --color-primary   <- color.text.primary
+     --color-secondary <- color.text.secondary
+     --color-tertiary  <- color.text.tertiary
+     --color-inverse   <- color.text.inverse
+     --color-base      <- color.surface.base
+     --color-muted     <- color.surface.muted
+     --color-raised    <- color.surface.raised
+     --color-line      <- color.border.default
+     --color-line-muted  <- color.border.muted
+     --color-line-strong <- color.border.strong
+     --color-status-live is a functional status color for the live indicator */
+  --color-primary: #1a1a1a;
+  --color-secondary: #8a8a8a;
+  --color-tertiary: oklab(0.217785 0.00000996143 0.00000435114 / 0.7);
+  --color-inverse: oklab(0.217785 0.00000996143 0.00000435114 / 0.65);
+  --color-base: #000000;
+  --color-muted: #ffffff;
+  --color-raised: #fafaf9;
+  --color-line: #e6e6e2;
+  --color-line-muted: oklab(0.217785 0.00000996143 0.00000435114 / 0.05);
+  --color-line-strong: oklab(0.923812 -0.00147891 0.00515193 / 0.7);
+  --color-status-live: #ef4444;
+
+  /* Spacing scale (design.md space.1..8): 1 unit = 2px */
+  --spacing: 2px;
+
+  /* Radius scale (design.md radius.*) */
+  --radius-xs: 10px;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 18px;
+  --radius-xl: 20px;
+  --radius-2xl: 28px;
+  --radius-step7: 50px;
+
+  /* Shadow scale (design.md shadow.1) */
+  --shadow-1: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+    rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px,
+    rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.1) 0px 1px 2px -1px;
+}
+
+:root {
+  /* The stage is a black fullscreen surface (color.surface.base) */
+  color-scheme: dark;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--color-base);
+  color: var(--color-primary);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 24px;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overscroll-behavior: none;
+}
+
+::selection {
+  background: var(--color-primary);
+  color: var(--color-raised);
+}
+
+/* WCAG 2.2 AA: focus must never be hidden; single global focus-visible rule. */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* Respect reduced motion: kill decorative animation only. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
