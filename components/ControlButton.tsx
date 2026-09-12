@@ -14,6 +14,10 @@ interface ControlButtonProps {
   loading?: boolean;
   /** Keyboard shortcut shown in the tooltip, e.g. "M". */
   shortcut?: string;
+  /** Single-key shortcut exposed to assistive tech, e.g. "m". */
+  ariaKeyshortcuts?: string;
+  /** Overrides the default tooltip (label + shortcut). */
+  tooltip?: string;
 }
 
 /**
@@ -29,8 +33,11 @@ export function ControlButton({
   disabled = false,
   loading = false,
   shortcut,
+  ariaKeyshortcuts,
+  tooltip: tooltipOverride,
 }: ControlButtonProps) {
-  const tooltip = shortcut ? `${label} (${shortcut})` : label;
+  const tooltip =
+    tooltipOverride ?? (shortcut ? `${label} (${shortcut})` : label);
 
   return (
     <button
@@ -38,6 +45,7 @@ export function ControlButton({
       onClick={onClick}
       aria-pressed={pressed ? true : undefined}
       aria-busy={loading || undefined}
+      aria-keyshortcuts={ariaKeyshortcuts}
       disabled={disabled || loading}
       title={tooltip}
       className={[

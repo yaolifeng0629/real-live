@@ -8,9 +8,26 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://github.com/yaolifeng0629/real-live"),
   title: "Real Live — Fullscreen Camera Monitor",
   description:
     "Real Live turns your device camera into a fullscreen live monitor. Privacy-first: video never leaves your device.",
+  applicationName: "Real Live",
+  keywords: ["camera", "webcam", "live monitor", "fullscreen", "getUserMedia"],
+  authors: [{ name: "Immerse", url: "https://github.com/yaolifeng0629" }],
+  openGraph: {
+    type: "website",
+    title: "Real Live — Fullscreen Camera Monitor",
+    description:
+      "Turns your device camera into a fullscreen live monitor. Privacy-first: video never leaves your device.",
+    siteName: "Real Live",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Real Live — Fullscreen Camera Monitor",
+    description:
+      "Turns your device camera into a fullscreen live monitor. Privacy-first: video never leaves your device.",
+  },
 };
 
 export const viewport: Viewport = {
