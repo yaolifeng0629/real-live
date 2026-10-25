@@ -31,7 +31,9 @@ scene.
 - **Mirror toggle** — selfie-style flipping without touching the stream.
 - **Snapshot** — one click saves the current frame (mirror-aware) as a
   timestamped PNG.
-- **Camera switching** — cycles every video input, refreshed on hot-plug.
+- **Camera switching** — flips front ↔ back on phones (back-first on first visit,
+  remembered afterwards), cycles every video input on desktop, refreshed on
+  hot-plug.
 - **Auto-hiding chrome** — controls fade after 3s idle while live and wake
   on any input; focus always reveals them.
 - **Status at a glance** — pulsing live indicator with resolution and frame

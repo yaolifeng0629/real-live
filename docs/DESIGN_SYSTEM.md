@@ -136,8 +136,18 @@ WCAG 2.5.8 target size with margin.
 
 ### 3.8 Camera switching
 
-- The Camera control cycles enumerated video inputs; the tooltip names the
-  active device; switching shows a transient hint chip.
+- Desktop: the Camera control cycles enumerated video inputs; the tooltip
+  names the active device; switching shows a transient hint chip.
+- Mobile (coarse pointer): the same control flips strictly between the
+  front and the rear camera — never a rotation through individual devices,
+  and multi-module rear setups choose the first (main) rear camera.
+- The first visit prefers the rear camera via an ideal `facingMode`; the
+  flipped side is persisted and preferred on later visits. Fallback
+  landings never overwrite a stored preference.
+- The preview mirror follows the side — on for front, off for rear — and
+  resets on every flip; the manual Mirror control can still override.
+- A failed flip restores the previous camera and reports the outcome via a
+  transient hint chip, never a modal or the error overlay.
 - Disabled with an explanatory tooltip when fewer than two cameras exist.
 - Device list refreshes on `devicechange` (hot-plug).
 

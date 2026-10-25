@@ -1,6 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import {
   Camera,
   FlipHorizontal2,
@@ -44,8 +50,10 @@ export function LiveStage() {
     settings,
     devices,
     activeDeviceId,
+    facing,
     start,
     switchDevice,
+    flip,
   } = useCamera();
   const stageRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLElement>(null);
@@ -54,7 +62,14 @@ export function LiveStage() {
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const flashTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const [mirror, setMirror] = useState(true);
+  // Manual mirror override; null follows the camera side: mirrored on the
+  // front camera, straight on the rear (unknown sides stay mirrored, which
+  // matches the legacy default).
+  const [mirrorOverride, setMirrorOverride] = useState<boolean | null>(null);
+  const mirror = mirrorOverride ?? facing !== "environment";
+  const toggleMirror = useCallback(() => {
+    setMirrorOverride(!mirror);
+  }, [mirror]);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [hint, setHint] = useState<string | null>(null);
   const [chromeHidden, setChromeHidden] = useState(false);
@@ -65,6 +80,22 @@ export function LiveStage() {
     setHint(message);
     hintTimerRef.current = setTimeout(() => setHint(null), 2500);
   }, []);
+
+  /* ---------- mobile detection ---------- */
+
+  // useSyncExternalStore keeps hydration clean: the server snapshot is
+  // false and the coarse-pointer upgrade lands on the client pass.
+  const coarsePointer = useSyncExternalStore(
+    (onStoreChange) => {
+      const media = window.matchMedia("(pointer: coarse)");
+      media.addEventListener("change", onStoreChange);
+      return () => media.removeEventListener("change", onStoreChange);
+    },
+    () =>
+      window.matchMedia("(pointer: coarse)").matches ||
+      navigator.maxTouchPoints > 0,
+    () => false,
+  );
 
   /* ---------- fullscreen ---------- */
 
@@ -181,7 +212,7 @@ export function LiveStage() {
       const key = event.key.toLowerCase();
       if (key === "m") {
         event.preventDefault();
-        setMirror((value) => !value);
+        toggleMirror();
       } else if (key === "f") {
         event.preventDefault();
         toggleFullscreen();
@@ -189,7 +220,7 @@ export function LiveStage() {
     };
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
-  }, [toggleFullscreen]);
+  }, [toggleFullscreen, toggleMirror]);
 
   /* ---------- snapshot ---------- */
 
@@ -246,6 +277,29 @@ export function LiveStage() {
     switchDevice(next.deviceId);
     showHint(`Switched to ${next.label}`);
   }, [activeIndex, devices, showHint, switchDevice]);
+
+  // Mobile: toggle strictly front <-> rear; the hook restores the previous
+  // camera on failure, and the hint says which side we stayed on.
+  const flipCamera = useCallback(async () => {
+    const result = await flip();
+    if (result.ok) {
+      // Reset to the side's default: mirrored front, straight rear.
+      setMirrorOverride(null);
+      showHint(
+        result.facing === "user"
+          ? "Switched to front camera"
+          : "Switched to rear camera",
+      );
+      return;
+    }
+    showHint(
+      facing === "user"
+        ? "Rear camera unavailable — staying on front."
+        : facing === "environment"
+          ? "Front camera unavailable — staying on rear."
+          : "Camera switch failed — staying on current camera.",
+    );
+  }, [facing, flip, showHint]);
 
   /* ---------- derived UI state ---------- */
 
@@ -392,7 +446,7 @@ export function LiveStage() {
           <ControlButton
             label="Mirror"
             icon={<FlipHorizontal2 />}
-            onClick={() => setMirror((value) => !value)}
+            onClick={toggleMirror}
             pressed={mirror}
             disabled={!isLive}
             shortcut="M"
@@ -409,12 +463,16 @@ export function LiveStage() {
           <ControlButton
             label="Camera"
             icon={<SwitchCamera />}
-            onClick={cycleCamera}
+            onClick={coarsePointer ? () => void flipCamera() : cycleCamera}
             disabled={!isLive || devices.length < 2}
             tooltip={
               devices.length < 2
                 ? "Switch camera (needs 2+ cameras)"
-                : `Switch camera — ${activeLabel ?? "current"}`
+                : coarsePointer
+                  ? facing
+                    ? `Flip to ${facing === "user" ? "rear" : "front"} camera`
+                    : "Flip camera"
+                  : `Switch camera — ${activeLabel ?? "current"}`
             }
           />
           <ControlButton
