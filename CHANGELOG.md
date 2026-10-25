@@ -4,6 +4,25 @@ All notable changes to Real Live are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and the project adheres to [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- Mobile camera flip: on coarse-pointer devices the Camera control toggles
+  strictly between the front and the rear camera — first visit lands on
+  the rear, the flipped side is remembered across sessions.
+- The preview mirror now follows the camera side (mirrored on the front
+  camera, straight on the rear) on every switch, with the manual override
+  still available afterwards.
+
+### Changed
+
+- The default constraint chain softly prefers the remembered camera side
+  (`facingMode` ideal) instead of hard-pinning the front camera, so
+  desktop behaviour is unchanged when only one camera exists.
+- New glossary defining the camera vocabulary (facing, flip, cycle,
+  mirror) used across the codebase and docs.
+
 ## [0.2.0] - 2026-09-12
 
 ### Added
