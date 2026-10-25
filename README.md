@@ -69,14 +69,14 @@ requires a secure context: HTTPS or localhost.
 
 ## Keyboard & Interactions
 
-| Input | Action |
-| ----- | ------ |
-| `M` | Toggle mirror |
-| `F` | Toggle fullscreen |
-| Double-click video | Toggle fullscreen |
-| `Esc` | Exit fullscreen (native) |
-| Mouse move / key press | Wake auto-hidden controls |
-| Tab | Reach every control; hidden chrome reappears |
+| Input                  | Action                                       |
+| ---------------------- | -------------------------------------------- |
+| `M`                    | Toggle mirror                                |
+| `F`                    | Toggle fullscreen                            |
+| Double-click video     | Toggle fullscreen                            |
+| `Esc`                  | Exit fullscreen (native)                     |
+| Mouse move / key press | Wake auto-hidden controls                    |
+| Tab                    | Reach every control; hidden chrome reappears |
 
 ## Project Structure
 
@@ -104,14 +104,14 @@ real-live/
 
 ## Troubleshooting
 
-| Symptom | Cause | Fix |
-| ------- | ----- | --- |
-| "Camera access denied" | Permission rejected | Allow the camera for this origin in browser settings, then Retry camera |
-| "No camera found" | No video input | Connect a camera and retry |
-| "Camera is busy" | Another app holds the device | Close the other app; the pipeline auto-retries with backoff |
-| "Camera requires a secure context" | Page served over plain HTTP | Use `localhost` or HTTPS |
-| Preview inside an iframe shows an error | The host iframe lacks `allow="camera"` | Open the URL in a standalone browser tab |
-| Black screen with UI visible | Camera starting or no frames yet | Wait for the Live indicator; check the error overlay if it appears |
+| Symptom                                 | Cause                                  | Fix                                                                     |
+| --------------------------------------- | -------------------------------------- | ----------------------------------------------------------------------- |
+| "Camera access denied"                  | Permission rejected                    | Allow the camera for this origin in browser settings, then Retry camera |
+| "No camera found"                       | No video input                         | Connect a camera and retry                                              |
+| "Camera is busy"                        | Another app holds the device           | Close the other app; the pipeline auto-retries with backoff             |
+| "Camera requires a secure context"      | Page served over plain HTTP            | Use `localhost` or HTTPS                                                |
+| Preview inside an iframe shows an error | The host iframe lacks `allow="camera"` | Open the URL in a standalone browser tab                                |
+| Black screen with UI visible            | Camera starting or no frames yet       | Wait for the Live indicator; check the error overlay if it appears      |
 
 ## Documentation
 
@@ -125,7 +125,3 @@ real-live/
 Real Live runs entirely in your browser. The MediaStream is held in memory
 only and every track is stopped on unmount. No video, audio, or metadata is
 stored or transmitted.
-
-## License
-
-[MIT](LICENSE)
